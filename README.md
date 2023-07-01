@@ -1,46 +1,18 @@
-# speed-typing
+# Speed-typing Challenge
+WIP
+## Introduction
+Speed typing test websites are useful for people who want to learn to type faster, type without looking at their keyboards, practice typing specific sets of entries (think numeric tests, address test, emoji test?), or get used to a new keyboard. You will also learn how to load different data sources based on the user input, store state in the browser, and create a timer.
 
-This template should help get you started developing with Vue 3 in Vite.
+## Requirements
+- Create a display box for a paragraph of text that the user will type
+- Create an input box for the user to type the displayed text
+- Highlight the character of the word users are currently typing (in the display box):
+    - GREEN - letter is correct
+    - RED - letter is wrong
+- Create a START button for the test to begin
+- Create a display box for the countdown timer
+- Set a countdown time for each test
+- Activate the timer when the user clicks on START
+- When the timer runs out, display how many words the user typed per minute
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
+Idea: [codementor.io - dev projects](https://www.codementor.io/projects/web/speed-typing-game-c51led1afn)

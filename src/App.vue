@@ -1,13 +1,29 @@
 <script setup lang="ts">
-import Button from './components/Button.vue'
+import {ref} from 'vue'
+import Button from '@components/Button.vue'
+import Board from '@components/Board.vue'
+import Timer from '@components/Timer.vue'
+
+const hasStarted = ref(false)
+const setStart = () => {
+  hasStarted.value = true;
+}
 </script>
 
 <template>
-  <header>
-    hi
+  <header class="flex justify-center md:max-w-2xl md:mx-auto">
+    <h1 className="text-2xl font-bold">Speed typing challenge!</h1>
   </header>
 
   <main>
-    <Button />
+    <div class="flex flex-col justify-center md:max-w-2xl md:mx-auto">
+      <Timer :startTimer="hasStarted" />
+      <Button
+        v-if="!hasStarted"
+        @click="setStart"
+        class="w-32 mx-auto"
+      >Start</Button>
+      <Board v-else/>
+    </div>
   </main>
 </template>
