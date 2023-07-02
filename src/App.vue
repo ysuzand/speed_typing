@@ -11,13 +11,13 @@ const setStart = () => {
 </script>
 
 <template>
-  <header class="flex justify-center md:max-w-2xl md:mx-auto">
+  <header class="flex justify-center my-4 md:max-w-2xl md:mx-auto">
     <h1 className="text-2xl font-bold">Speed typing challenge!</h1>
   </header>
 
   <main>
     <div class="flex flex-col justify-center md:max-w-2xl md:mx-auto">
-      <Timer :startTimer="hasStarted" />
+      <Timer :startTimer="hasStarted" class="mb-4"/>
       <Button
         v-if="!hasStarted"
         @click="setStart"
