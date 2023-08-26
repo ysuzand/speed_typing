@@ -4,7 +4,8 @@ import Button from '@components/Button.vue'
 import Board from '@components/Board.vue'
 import Timer from '@components/Timer.vue'
 
-const hasStarted = ref(false)
+const hasStarted = ref(false);
+const gameOver = ref(false);
 const setStart = () => {
   hasStarted.value = true;
 }
@@ -17,13 +18,13 @@ const setStart = () => {
 
   <main>
     <div class="flex flex-col justify-center p-4 md:max-w-2xl md:mx-auto">
-      <Timer :startTimer="hasStarted" class="mb-4"/>
+      <Timer :startTimer="hasStarted" @gameOver="gameOver = true" class="mb-4"/>
       <Button
         v-if="!hasStarted"
         @click="setStart"
         class="w-32 mx-auto"
       >Start</Button>
-      <Board v-else/>
+      <Board v-else :isOver="gameOver"/>
     </div>
   </main>
 </template>

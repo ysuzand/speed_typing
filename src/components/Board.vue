@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, onMounted, watch} from 'vue';
+import {ref, onMounted, watch, reactive} from 'vue';
 import TextArea from '@components/TextArea.vue';
 
 type UserInputPayload = {
@@ -10,13 +10,21 @@ type UserInputPayload = {
 
 const textWrapper = ref<HTMLParagraphElement>(null!);
 const textInArray = ref<Array<string>>([]);
-const exampleText = 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum soluta, ullam veniam beatae eligendi, delectus similique accusantium eveniet nisi veritatis, aliquid et excepturi. Ut optio aliquam hic quisquam eligendi aliquid?'
+const result = reactive({
+	correct: 0,
+	fail: 0,
+})
+defineProps<{
+	isOver: boolean;
+}>()
 
 onMounted(() => {
-	textInArray.value = exampleText.split('');
+	fetch('/typing-text.json')
+	.then(res => res.json())
+	.then(data => { textInArray.value = data['1'].split('') })
 })
 
-const compareExampleWithUserInput = (index: number) => {
+const compareUserInput = (index: number) => {
 	// 1. Find spanElement with the same index
 	const targetSpanElement = textWrapper.value.children[index]
 	const targetCharacter = targetSpanElement.innerHTML;
@@ -25,27 +33,43 @@ const compareExampleWithUserInput = (index: number) => {
 	// 3. Replace spanElement with one with css class (green/red)
 	if (targetCharacter === userInputCharacter) {
 		targetSpanElement.classList.add('green');
+		result.correct++;
 	} else {
 		targetSpanElement.classList.add('red');
+		result.fail++;
 	}
+}
+
+const handleUserInputDelete = (previousInput: UserInputPayload) => {
+	const targetElement = textWrapper.value.children[previousInput?.length - 1];
+	if(targetElement.classList.contains('red')) {
+		targetElement.classList.remove('red');
+		result.fail--;
+	} else {
+		targetElement.classList.remove('green');
+		result.correct--;
+	}		
 }
 
 const userInputs = ref<UserInputPayload | null>(null);
 
 // Watch if a user deletes inputs. If so, delete color class.
 watch(userInputs, (current, prev) => {
-	if (current && prev && (current.length < prev?.length)) {
-		const targetElement = textWrapper.value.children[prev?.length - 1];
-		targetElement.classList.remove('red');
-		targetElement.classList.remove('green');
+	console.log(prev?.length)
+	if (current && prev) {
+		if (current.length < prev?.length) {
+			handleUserInputDelete(prev);
+		} else if (current.length >= 0) {
+			compareUserInput(current.length - 1);
+		}
+	} else {
+		current?.length && compareUserInput(current?.length - 1);
 	}
 })
 const checkInput = (payload: UserInputPayload) => {
 	userInputs.value = payload;
-	if (payload.length > 0) {
-		compareExampleWithUserInput(payload.length - 1);
-	}
 }
+
 </script>
 <template>
 	<div class="flex flex-col">
@@ -56,9 +80,12 @@ const checkInput = (payload: UserInputPayload) => {
 			>{{ char }}</span>
 		</p>
 		<TextArea @user-input="checkInput" />
+		<div v-show="isOver" class="over">
+			Game Over Correct: {{result.correct}} Fail: {{result.fail}}
+		</div>
 	</div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 .green {
 	color: green;
 	text-decoration: underline;
@@ -67,5 +94,9 @@ const checkInput = (payload: UserInputPayload) => {
 .red {
 	color: red;
 	text-decoration: underline;
+}
+
+.over {
+	color: blue;
 }
 </style>
