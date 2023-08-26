@@ -9,6 +9,10 @@ const gameOver = ref(false);
 const setStart = () => {
   hasStarted.value = true;
 }
+const reset = () => {
+  hasStarted.value = false;
+  gameOver.value = false;
+}
 </script>
 
 <template>
@@ -18,13 +22,26 @@ const setStart = () => {
 
   <main>
     <div class="flex flex-col justify-center p-4 md:max-w-2xl md:mx-auto">
-      <Timer :startTimer="hasStarted" @gameOver="gameOver = true" class="mb-4"/>
+      <Timer
+        :startTimer="hasStarted"
+        @gameOver="gameOver = true"
+        class="mb-4"/>
       <Button
         v-if="!hasStarted"
         @click="setStart"
         class="w-32 mx-auto"
       >Start</Button>
-      <Board v-else :isOver="gameOver"/>
+      <template v-else>
+        <Board :isOver="gameOver" :init="!gameOver"/>
+        <Button
+          v-show="gameOver"
+          @click="reset"
+          class="w-32 mx-auto"
+        >
+          Try again
+        </Button>
+      </template>
+     
     </div>
   </main>
 </template>

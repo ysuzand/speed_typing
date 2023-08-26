@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, onMounted, watch, reactive} from 'vue';
+import {ref, onMounted, watch, reactive, onUpdated} from 'vue';
 import TextArea from '@components/TextArea.vue';
 
 type UserInputPayload = {
@@ -14,14 +14,22 @@ const result = reactive({
 	correct: 0,
 	fail: 0,
 })
-defineProps<{
+const props = defineProps<{
 	isOver: boolean;
+	init: boolean;
 }>()
 
 onMounted(() => {
 	fetch('/typing-text.json')
 	.then(res => res.json())
 	.then(data => { textInArray.value = data['1'].split('') })
+});
+
+onUpdated(() => {
+	if (props.init) {
+		result.correct = 0;
+		result.fail = 0;
+	}
 })
 
 const compareUserInput = (index: number) => {
@@ -79,8 +87,8 @@ const checkInput = (payload: UserInputPayload) => {
 				:data-index="index"
 			>{{ char }}</span>
 		</p>
-		<TextArea @user-input="checkInput" />
-		<div v-show="isOver" class="over">
+		<TextArea v-if="!isOver" @user-input="checkInput" class="w-full" />
+		<div v-else class="over flex justify-center">
 			Game Over Correct: {{result.correct}} Fail: {{result.fail}}
 		</div>
 	</div>

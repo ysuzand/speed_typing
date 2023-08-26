@@ -24,6 +24,9 @@ const timeKeeper = computed(() => `${secondsTens.value}${seconds.value}`)
 watchEffect(() => {
 	if (props.startTimer) {
 		startTimer()
+	} else {
+		seconds.value = 0;
+		secondsTens.value = 3;
 	}
 })
 watch(seconds, (newValue) => {
