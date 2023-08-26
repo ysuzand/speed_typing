@@ -16,7 +16,7 @@ const setStart = () => {
   </header>
 
   <main>
-    <div class="flex flex-col justify-center md:max-w-2xl md:mx-auto">
+    <div class="flex flex-col justify-center p-4 md:max-w-2xl md:mx-auto">
       <Timer :startTimer="hasStarted" class="mb-4"/>
       <Button
         v-if="!hasStarted"
