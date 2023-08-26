@@ -49,6 +49,6 @@ onUnmounted(() => {
 <template>
 	<div class="flex justify-center gap-2 text-2xl border-2 border-solid border-gray-300 rounded-md py-4 px-8">
 		<v-icon name="md-timer-outlined" scale="1.75"/>
-		<div class="w-8">{{!startTimer ? 'ready' : timeKeeper }}</div>
+		<div class="w-8">{{!startTimer ? 'ready' : timeKeeper}}</div>
 	</div>
 </template>

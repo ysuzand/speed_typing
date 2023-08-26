@@ -61,7 +61,6 @@ const handleUserInputDelete = (previousInput: UserInputPayload) => {
 
 const userInputs = ref<UserInputPayload | null>(null);
 
-// Watch if a user deletes inputs. If so, delete color class.
 watch(userInputs, (current, prev) => {
 	console.log(prev?.length)
 	if (current && prev) {
@@ -98,12 +97,10 @@ const checkInput = (payload: UserInputPayload) => {
 	color: green;
 	text-decoration: underline;
 }
-
 .red {
 	color: red;
 	text-decoration: underline;
 }
-
 .over {
 	color: blue;
 }

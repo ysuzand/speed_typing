@@ -21,6 +21,3 @@ const emitInputValue = (e: Event) => {
 		class="border-2 border-gray-600 border-solid rounded-md text-xl p-4"
 	/>
 </template>
-<style lang="scss">
-
-</style>
