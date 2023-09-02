@@ -30,9 +30,13 @@ onUpdated(() => {
 		result.correct = 0;
 		result.fail = 0;
 	}
+
+  if (props.isOver) {
+    countResult();
+  }
 })
 
-const compareUserInput = (index: number) => {
+const markupCorrectOrFail = (index: number) => {
 	// 1. Find spanElement with the same index
 	const targetSpanElement = textWrapper.value.children[index]
 	const targetCharacter = targetSpanElement.innerHTML;
@@ -41,36 +45,64 @@ const compareUserInput = (index: number) => {
 	// 3. Replace spanElement with one with css class (green/red)
 	if (targetCharacter === userInputCharacter) {
 		targetSpanElement.classList.add('green');
-		result.correct++;
 	} else {
 		targetSpanElement.classList.add('red');
-		result.fail++;
 	}
 }
 
-const handleUserInputDelete = (previousInput: UserInputPayload) => {
-	const targetElement = textWrapper.value.children[previousInput?.length - 1];
-	if(targetElement.classList.contains('red')) {
+// Remove red/green markup according to the number of deleted characters
+const handleInputDelete = (previousInput: UserInputPayload, numberOfDeletedCharacter: number) => {
+	// Start element index.
+  let targetIndex = previousInput?.length - 1;
+  // Loop through elements to delete red/green markup and update result counts.
+  for (let count = numberOfDeletedCharacter; count > 0; count--) {
+    const targetElement = textWrapper.value.children[targetIndex];
+    // Reset 'error' class.
+    if (targetElement.classList.contains('red')) {
 		targetElement.classList.remove('red');
-		result.fail--;
 	} else {
+    // Reset 'correct' class.
 		targetElement.classList.remove('green');
-		result.correct--;
 	}		
+  
+    targetIndex--;
+  }
+}
+
+const countResult = () => {
+  let fail = 0, correct = 0;
+  Array.from(textWrapper.value.children).forEach((childElement) => {
+    childElement.classList.contains('green') && correct++;
+    childElement.classList.contains('red') && fail++;
+  })
+
+  result.correct = correct;
+  result.fail = fail;
+}
+
+const handleDeleteAll = () => {
+  // HTMLCollection
+  Array.from(textWrapper.value.children).forEach((child) => {
+    if (child.getAttribute('class')) {
+      child.removeAttribute('class')
+    }
+  })
 }
 
 const userInputs = ref<UserInputPayload | null>(null);
 
 watch(userInputs, (current, prev) => {
-	console.log(prev?.length)
 	if (current && prev) {
+    if (current.length === 0) {
+      handleDeleteAll();
+    }
 		if (current.length < prev?.length) {
-			handleUserInputDelete(prev);
+			handleInputDelete(prev, prev.length - current.length);
 		} else if (current.length >= 0) {
-			compareUserInput(current.length - 1);
+			markupCorrectOrFail(current.length - 1);
 		}
 	} else {
-		current?.length && compareUserInput(current?.length - 1);
+		current?.length && markupCorrectOrFail(current?.length - 1);
 	}
 })
 const checkInput = (payload: UserInputPayload) => {
